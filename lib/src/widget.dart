@@ -112,12 +112,14 @@ class _BottomExpandableAppBarState extends State<BottomExpandableAppBar> {
   }
 
   void _updateBarController() {
-    final BottomBarController newController = widget.controller ?? DefaultBottomBarController.of(context);
+    final BottomBarController newController =
+        widget.controller ?? DefaultBottomBarController.of(context);
 
     if (newController == _controller) return;
 
     if (_controller != null) {
-      _controller!.state.removeListener(_handleBottomBarControllerAnimationTick);
+      _controller!.state
+          .removeListener(_handleBottomBarControllerAnimationTick);
     }
 
     _controller = newController;
@@ -129,6 +131,7 @@ class _BottomExpandableAppBarState extends State<BottomExpandableAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    print(panelState);
     EdgeInsets viewPadding = widget.attachSide == Side.Bottom
         ? EdgeInsets.only(bottom: MediaQuery.of(context).viewPadding.bottom)
         : EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
@@ -143,32 +146,60 @@ class _BottomExpandableAppBarState extends State<BottomExpandableAppBar> {
               ),
             );
 
-        final finalHeight = widget.expandedHeight ?? constraints.maxHeight - viewPadding.vertical;
+        final finalHeight = widget.expandedHeight ??
+            constraints.maxHeight - viewPadding.vertical;
 
         _controller!.dragLength = finalHeight;
 
         return Stack(
-          alignment: widget.attachSide == Side.Bottom ? Alignment.bottomCenter : Alignment.topCenter,
+          alignment: widget.attachSide == Side.Bottom
+              ? Alignment.bottomCenter
+              : Alignment.topCenter,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: widget.horizontalMargin),
+              padding:
+                  EdgeInsets.symmetric(horizontal: widget.horizontalMargin),
               child: Stack(
+                alignment: Alignment.bottomCenter,
                 children: [
                   Container(
-                    height: panelState * finalHeight + widget.appBarHeight + widget.bottomOffset + viewPadding.vertical,
+height: panelState<1?panelState * 1 +
+        widget.appBarHeight +
+        widget.bottomOffset +
+        viewPadding.vertical:null,
                     decoration: widget.expandedDecoration ??
                         BoxDecoration(
-                          color: widget.expandedBackColor ?? Theme.of(context).backgroundColor,
+                          color: widget.expandedBackColor ??
+                              Theme.of(context).backgroundColor,
                           borderRadius: BorderRadius.circular(25),
                         ),
-                    child: Opacity(opacity: panelState > 0.25 ? 1 : panelState * 4, child: widget.expandedBody),
+                    child: Opacity(
+                        opacity: panelState > 0.25 ? 1 : panelState * 4,
+                            child:Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            if(widget.expandedBody!=null && panelState==1)
+                              widget.expandedBody!,
+                            SizedBox(
+                              height: panelState * 1 +
+                              widget.appBarHeight +
+                              widget.bottomOffset +
+                              viewPadding.vertical,
+                            ),
+
+                          ],
+                        ),
+
+                  ),
                   ),
                 ],
               ),
             ),
             ClipPath(
               child: Container(
-                color: widget.bottomAppBarColor ?? Theme.of(context).bottomAppBarColor,
+                color: widget.bottomAppBarColor ??
+                    Theme.of(context).bottomAppBarColor,
                 height: widget.appBarHeight + viewPadding.vertical,
                 child: Padding(
                   padding: viewPadding,
@@ -214,11 +245,14 @@ class _BottomAppBarClipper extends CustomClipper<Path> {
       0.0,
       (geometry.value.bottomNavigationBarTop ?? 0) * -1.0 - buttonOffset,
     );
-    return shape.getOuterPath(Offset(0, 0) & size, button?.inflate(notchMargin));
+    return shape.getOuterPath(
+        Offset(0, 0) & size, button?.inflate(notchMargin));
   }
 
   @override
   bool shouldReclip(_BottomAppBarClipper oldClipper) {
-    return oldClipper.geometry != geometry || oldClipper.shape != shape || oldClipper.notchMargin != notchMargin;
+    return oldClipper.geometry != geometry ||
+        oldClipper.shape != shape ||
+        oldClipper.notchMargin != notchMargin;
   }
 }
