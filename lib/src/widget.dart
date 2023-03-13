@@ -163,10 +163,6 @@ class _BottomExpandableAppBarState extends State<BottomExpandableAppBar> {
                 alignment: Alignment.bottomCenter,
                 children: [
                   Container(
-height: panelState<1?panelState * 1 +
-        widget.appBarHeight +
-        widget.bottomOffset +
-        viewPadding.vertical:null,
                     decoration: widget.expandedDecoration ??
                         BoxDecoration(
                           color: widget.expandedBackColor ??
@@ -187,7 +183,6 @@ height: panelState<1?panelState * 1 +
                               widget.bottomOffset +
                               viewPadding.vertical,
                             ),
-
                           ],
                         ),
 
